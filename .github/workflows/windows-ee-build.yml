@@ -1,5 +1,5 @@
 # Workflow name
-name: Windows EE build
+name: VCC EE build
 
 # Controls when the workflow will run
 on:
@@ -8,7 +8,7 @@ on:
     branches:
       - main
     paths:
-      - 'windows_ee/**'
+      - 'vcc_ee/**'
 
   # Schedule workflow run at 00:00 on Sunday
   schedule:
@@ -20,11 +20,11 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   call-deploy-workflow:
-    uses:  cloin/ee-builds/.github/workflows/deploy.yml@main
+    uses:  styxxen21/ee-builds/.github/workflows/deploy.yml@main
     with:
-      EE_FOLDER_NAME: 'windows_ee'
+      EE_FOLDER_NAME: 'vcc_ee'
       EE_IMAGE_TAG: 'latest'
-      QUAY_USER: 'acme_corp'
+      AAP_USER: 'cr-ansiblehub-ee'
     secrets:
       REDHAT_USERNAME: ${{ secrets.REDHAT_USERNAME }}
       REDHAT_PASSWORD: ${{ secrets.REDHAT_PASSWORD }}

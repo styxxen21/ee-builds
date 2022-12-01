@@ -17,8 +17,8 @@ on:
         default: 'latest'
         required: true
         type: string
-      QUAY_USER:
-        description: 'this is used during the image push to quay'
+      AAP_USER:
+        description: 'this is used during the image push to AAP'
         required: true
         type: string
     secrets:
@@ -28,9 +28,9 @@ on:
       REDHAT_USERNAME:
         description: 'needed for registry login'
         required: false
-      AH_TOKEN:
-        description: 'API token for hosted automation hub'
-        required: false
+#      AH_TOKEN:
+#        description: 'API token for hosted automation hub'
+#        required: false
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -48,28 +48,28 @@ jobs:
       - name: Install python requirements (ansible-builder)
         run: pip install -r requirements.txt
 
-      - name: Log in to quay.io
-        id: registry-quay
+      - name: Log in to automation hub
+        id: registry-AAP
         uses: redhat-actions/podman-login@v1
         with:
-          registry: quay.io
+          registry: hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com
           username: ${{ secrets.REDHAT_USERNAME }}
           password: ${{ secrets.REDHAT_PASSWORD }}
 
-      - name: Log in to registry.redhat.io
-        id: registry-redhat
-        uses: redhat-actions/podman-login@v1
-        with:
-          registry: registry.redhat.io
-          username: ${{ secrets.REDHAT_USERNAME }}
-          password: ${{ secrets.REDHAT_PASSWORD }}
+#      - name: Log in to registry.redhat.io
+#        id: registry-redhat
+#        uses: redhat-actions/podman-login@v1
+#        with:
+#          registry: registry.redhat.io
+#          username: ${{ secrets.REDHAT_USERNAME }}
+#          password: ${{ secrets.REDHAT_PASSWORD }}
           
-      - name: substitute token for automation hub
-        id: ah-token
-        run: |
-          sed -i "s/my_ah_token/$AH_TOKEN/1" ansible.cfg
-        env:
-          AH_TOKEN: ${{ secrets.AH_TOKEN }}
+#      - name: substitute token for automation hub
+#        id: ah-token
+#        run: |
+#          sed -i "s/my_ah_token/$AH_TOKEN/1" ansible.cfg
+#        env:
+#          AH_TOKEN: ${{ secrets.AH_TOKEN }}
 
       - name: Build image
         id: build-image
@@ -83,15 +83,16 @@ jobs:
 #           ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_TOKEN: ${{ secrets.AH_TOKEN }}
 # Above env var doesn't work yet: https://github.com/ansible/ansible-builder/issues/346
            
-      - name: Push To quay.io
-        id: push-to-quay
+      - name: Push To AAP
+        id: push-to-aap
         uses: redhat-actions/push-to-registry@v2
         with:
           image: ${{ inputs.EE_FOLDER_NAME }}
           tags: |
             ${{ inputs.EE_IMAGE_TAG }}
             ${{ github.sha }}
-          registry: quay.io/${{ inputs.QUAY_USER }}/
+#          registry: quay.io/${{ inputs.QUAY_USER }}/
+          registry: hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com
           username: ${{ secrets.REDHAT_USERNAME }}
           password: ${{ secrets.REDHAT_PASSWORD }} 
         
@@ -100,9 +101,9 @@ jobs:
         run: |
           echo "## :rocket: Usage" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Image pushed to repository: [${{ steps.push-to-quay.outputs.registry-path }}](https://${{ steps.push-to-quay.outputs.registry-path }})" >> $GITHUB_STEP_SUMMARY
-          echo "> \`podman pull ${{ steps.push-to-quay.outputs.registry-path }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "> \`podman pull quay.io/${{ inputs.QUAY_USER }}/${{ inputs.EE_FOLDER_NAME }}:${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "Image pushed to repository: [${{ steps.push-to-aap.outputs.registry-path }}](https://${{ steps.push-to-aap.outputs.registry-path }})" >> $GITHUB_STEP_SUMMARY
+          echo "> \`podman pull ${{ steps.push-to-aap.outputs.registry-path }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "> \`podman pull hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/${{ inputs.EE_FOLDER_NAME }}:${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
           echo "## :pushpin: Ansible info:" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
