@@ -19,7 +19,7 @@ on:
         type: string
       AAP_USER:
         description: 'this is used during the image push to AAP'
-        required: true
+        required: false
         type: string
     secrets:
       REDHAT_PASSWORD:
@@ -53,8 +53,8 @@ jobs:
         uses: redhat-actions/podman-login@v1
         with:
           registry: hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com
-          username: cr-ansiblehub-ee
-          password: Ansible2022!EE
+          username: ${{ secrets.REDHAT_USERNAME }}
+          password: ${{ secrets.REDHAT_PASSWORD }}
 
 #      - name: Log in to registry.redhat.io
 #        id: registry-redhat
