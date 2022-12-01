@@ -53,8 +53,8 @@ jobs:
         uses: redhat-actions/podman-login@v1
         with:
           registry: hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com
-          username: ${{ secrets.REDHAT_USERNAME }}
-          password: ${{ secrets.REDHAT_PASSWORD }}
+          username: cr-ansiblehub-ee
+          password: Ansible2022!EE
 
 #      - name: Log in to registry.redhat.io
 #        id: registry-redhat
