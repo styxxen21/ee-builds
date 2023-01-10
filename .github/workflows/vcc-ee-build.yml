@@ -26,5 +26,5 @@ jobs:
       EE_IMAGE_TAG: 'latest'
 #      AAP_USER: 'cr-ansiblehub-ee'
     secrets:
-      REDHAT_USERNAME: ${{ secrets.HUB_USERNAME }}
-      REDHAT_PASSWORD: ${{ secrets.HUB_PASSWORD }}
+      HUB_USERNAME: ${{ secrets.HUB_USERNAME }}
+      HUB_PASSWORD: ${{ secrets.HUB_PASSWORD }}
