@@ -22,10 +22,10 @@ on:
         required: false
         type: string
     secrets:
-      REDHAT_PASSWORD:
+      HUB_PASSWORD:
         description: 'needed for registry login'
         required: false
-      REDHAT_USERNAME:
+      HUB_USERNAME:
         description: 'needed for registry login'
         required: false
 #      AH_TOKEN:
@@ -53,8 +53,8 @@ jobs:
         uses: redhat-actions/podman-login@v1
         with:
           registry: hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com
-          username: ${{ secrets.REDHAT_USERNAME }}
-          password: ${{ secrets.REDHAT_PASSWORD }}
+          username: ${{ secrets.HUB_USERNAME }}
+          password: ${{ secrets.HUB_PASSWORD }}
 
 #      - name: Log in to registry.redhat.io
 #        id: registry-redhat
@@ -93,8 +93,8 @@ jobs:
             ${{ github.sha }}
 #          registry: quay.io/${{ inputs.QUAY_USER }}/
           registry: hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com
-          username: ${{ secrets.REDHAT_USERNAME }}
-          password: ${{ secrets.REDHAT_PASSWORD }} 
+          username: ${{ secrets.HUB_USERNAME }}
+          password: ${{ secrets.HUB_PASSWORD }} 
         
       - name: Print summary
         working-directory: ${{ inputs.EE_FOLDER_NAME }}
