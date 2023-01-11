@@ -71,9 +71,9 @@ jobs:
 #        env:
 #          AH_TOKEN: ${{ secrets.AH_TOKEN }}
 
-      - name: Build image
-        id: build-image
-        working-directory: ${{ inputs.EE_FOLDER_NAME }}
+#      - name: Build image
+#        id: build-image
+#        working-directory: ${{ inputs.EE_FOLDER_NAME }}
 #        run: |
 #          ansible-builder build \
 #          --context=../${{ inputs.EE_FOLDER_NAME }} \
