@@ -74,11 +74,18 @@ jobs:
       - name: Build image
         id: build-image
         working-directory: ${{ inputs.EE_FOLDER_NAME }}
+#        run: |
+#          ansible-builder build \
+#          --context=../${{ inputs.EE_FOLDER_NAME }} \
+#          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ inputs.EE_IMAGE_TAG }} \
+#          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ github.sha }}
+      - name: Build image
+        id: build-image
+        working-directory: ${{ inputs.EE_FOLDER_NAME }}
         run: |
           ansible-builder build \
-          --context=../${{ inputs.EE_FOLDER_NAME }} \
-          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ inputs.EE_IMAGE_TAG }} \
-          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ github.sha }}
+          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ inputs.EE_IMAGE_TAG }}
+
 #         env:
 #           ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_TOKEN: ${{ secrets.AH_TOKEN }}
 # Above env var doesn't work yet: https://github.com/ansible/ansible-builder/issues/346
