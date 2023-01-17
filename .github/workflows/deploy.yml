@@ -73,7 +73,7 @@ jobs:
       - name: become sudo
         id: become-sudo
         run: |
-          sudo su
+          su - root
           
       - name: Build image
         id: build-image
