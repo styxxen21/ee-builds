@@ -60,13 +60,13 @@ jobs:
           username: ${{ secrets.HUB_USERNAME }}
           password: ${{ secrets.HUB_PASSWORD }}
 
-#      - name: Log in to registry.redhat.io
-#        id: registry-redhat
-#        uses: redhat-actions/podman-login@v1
-#        with:
-#          registry: registry.redhat.io
-#          username: ${{ secrets.REDHAT_USERNAME }}
-#          password: ${{ secrets.REDHAT_PASSWORD }}
+      - name: Log in to registry.redhat.io
+        id: registry-redhat
+        uses: redhat-actions/podman-login@v1
+        with:
+          registry: registry.redhat.io
+          username: ${{ secrets.REDHAT_USERNAME }}
+          password: ${{ secrets.REDHAT_PASSWORD }}
           
 #      - name: substitute token for automation hub
 #        id: ah-token
@@ -79,20 +79,20 @@ jobs:
 #        run: |
 #          sudo -i
           
-#      - name: Build image
-#        id: build-image
-#        working-directory: ${{ inputs.EE_FOLDER_NAME }}
-#        run: |
-#          sudo /usr/local/bin/ansible-builder build \
-#          --context=../${{ inputs.EE_FOLDER_NAME }} \
-#          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ inputs.EE_IMAGE_TAG }} \
-#          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ github.sha }}
       - name: Build image
         id: build-image
         working-directory: ${{ inputs.EE_FOLDER_NAME }}
         run: |
           sudo /usr/local/bin/ansible-builder build \
-          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ inputs.EE_IMAGE_TAG }}
+          --context=../${{ inputs.EE_FOLDER_NAME }} \
+          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ inputs.EE_IMAGE_TAG }} \
+          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ github.sha }}
+#      - name: Build image
+#        id: build-image
+#        working-directory: ${{ inputs.EE_FOLDER_NAME }}
+#        run: |
+#          sudo /usr/local/bin/ansible-builder build \
+#          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ inputs.EE_IMAGE_TAG }}
 
 #         env:
 #           ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_TOKEN: ${{ secrets.AH_TOKEN }}
@@ -104,9 +104,9 @@ jobs:
         with:
           image: ${{ inputs.EE_FOLDER_NAME }}
           tags: |
-            ${{ inputs.EE_FOLDER_NAME }}
+#            ${{ inputs.EE_FOLDER_NAME }}
             ${{ inputs.EE_IMAGE_TAG }}
-#            ${{ github.sha }}
+            ${{ github.sha }}
 #          registry: quay.io/${{ inputs.QUAY_USER }}/
           registry: hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com
           username: ${{ secrets.HUB_USERNAME }}
