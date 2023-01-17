@@ -94,21 +94,28 @@ jobs:
 #          sudo /usr/local/bin/ansible-builder build \
 #          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ inputs.EE_IMAGE_TAG }}
 
+      - name: Push image
+        id: push-image
+        working-directory: ${{ inputs.EE_FOLDER_NAME }}
+        run: |
+          sudo podman push \
+          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ inputs.EE_IMAGE_TAG }}
+
 #         env:
 #           ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_TOKEN: ${{ secrets.AH_TOKEN }}
 # Above env var doesn't work yet: https://github.com/ansible/ansible-builder/issues/346
            
-      - name: Push To AAP
-        id: push-to-aap
-        uses: redhat-actions/push-to-registry@v2
-        with:
-          image: ${{ inputs.EE_FOLDER_NAME }}
-          tags: |
-            ${{ inputs.EE_IMAGE_TAG }}
-            ${{ github.sha }}
-          registry: hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com
-          username: ${{ secrets.HUB_USERNAME }}
-          password: ${{ secrets.HUB_PASSWORD }} 
+#      - name: Push To AAP
+#        id: push-to-aap
+#       uses: redhat-actions/push-to-registry@v2
+#        with:
+#          image: ${{ inputs.EE_FOLDER_NAME }}
+#          tags: |
+#            ${{ inputs.EE_IMAGE_TAG }}
+#            ${{ github.sha }}
+#          registry: hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com
+#          username: ${{ secrets.HUB_USERNAME }}
+#          password: ${{ secrets.HUB_PASSWORD }} 
         
       - name: Print summary
         working-directory: ${{ inputs.EE_FOLDER_NAME }}
