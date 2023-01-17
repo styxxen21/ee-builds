@@ -79,7 +79,7 @@ jobs:
         id: build-image
         working-directory: ${{ inputs.EE_FOLDER_NAME }}
         run: |
-          /usr/local/bin/ansible-builder build \
+          sudo /usr/local/bin/ansible-builder build \
           --context=../${{ inputs.EE_FOLDER_NAME }} \
           --tag=${{ inputs.EE_FOLDER_NAME }}:${{ inputs.EE_IMAGE_TAG }} \
           --tag=${{ inputs.EE_FOLDER_NAME }}:${{ github.sha }}
