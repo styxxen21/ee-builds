@@ -46,9 +46,7 @@ jobs:
         uses: actions/checkout@v2
         
       - name: Install python requirements (ansible-builder)
-        run: pip install -r requirements.txt
-      - name: check python version
-        run: python --version
+        run: python3.8 -m pip install ansible-builder
 
       - name: Log in to automation hub
         id: registry-AAP
