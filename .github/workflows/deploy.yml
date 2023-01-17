@@ -71,20 +71,20 @@ jobs:
 #        env:
 #          AH_TOKEN: ${{ secrets.AH_TOKEN }}
 
-#      - name: Build image
-#        id: build-image
-#        working-directory: ${{ inputs.EE_FOLDER_NAME }}
-#        run: |
-#          ansible-builder build \
-#          --context=../${{ inputs.EE_FOLDER_NAME }} \
-#          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ inputs.EE_IMAGE_TAG }} \
-#          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ github.sha }}
       - name: Build image
         id: build-image
         working-directory: ${{ inputs.EE_FOLDER_NAME }}
         run: |
           /usr/local/bin/ansible-builder build \
-          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ inputs.EE_IMAGE_TAG }}
+          --context=../${{ inputs.EE_FOLDER_NAME }} \
+          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ inputs.EE_IMAGE_TAG }} \
+          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ github.sha }}
+#      - name: Build image
+#        id: build-image
+#        working-directory: ${{ inputs.EE_FOLDER_NAME }}
+#        run: |
+#          /usr/local/bin/ansible-builder build \
+#          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ inputs.EE_IMAGE_TAG }}
 
 #         env:
 #           ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_TOKEN: ${{ secrets.AH_TOKEN }}
