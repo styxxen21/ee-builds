@@ -70,7 +70,11 @@ jobs:
 #          sed -i "s/my_ah_token/$AH_TOKEN/1" ansible.cfg
 #        env:
 #          AH_TOKEN: ${{ secrets.AH_TOKEN }}
-
+      - name: become sudo
+        id: become-sudo
+        run: |
+          sudo su
+          
       - name: Build image
         id: build-image
         working-directory: ${{ inputs.EE_FOLDER_NAME }}
