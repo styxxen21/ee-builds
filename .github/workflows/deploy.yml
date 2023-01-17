@@ -41,6 +41,10 @@ jobs:
     environment: deploy
     steps:
 
+      - name: Chown user
+        run: |
+          sudo chown -R $USER:$USER $GITHUB_WORKSPACE
+
       # In this job, all steps begin with a name
       - name: Checkout repo
         uses: actions/checkout@v2
