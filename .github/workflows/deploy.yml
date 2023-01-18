@@ -84,9 +84,15 @@ jobs:
         working-directory: ${{ inputs.EE_FOLDER_NAME }}
         run: |
           sudo /usr/local/bin/ansible-builder build \
-          --context=../${{ inputs.EE_FOLDER_NAME }} \
-          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ inputs.EE_IMAGE_TAG }} \
-          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ github.sha }}
+          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ inputs.EE_IMAGE_TAG }}
+#      - name: Build image
+#        id: build-image
+#        working-directory: ${{ inputs.EE_FOLDER_NAME }}
+#        run: |
+#          sudo /usr/local/bin/ansible-builder build \
+#          --context=../${{ inputs.EE_FOLDER_NAME }} \
+#          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ inputs.EE_IMAGE_TAG }} \
+#          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ github.sha }}
 #      - name: Build image
 #        id: build-image
 #        working-directory: ${{ inputs.EE_FOLDER_NAME }}
@@ -94,19 +100,31 @@ jobs:
 #          sudo /usr/local/bin/ansible-builder build \
 #          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ inputs.EE_IMAGE_TAG }}
 
-      - name: Push image
-        id: push-image
-        working-directory: ${{ inputs.EE_FOLDER_NAME }}
-        run: |
-          sudo podman push \
-          ${{ inputs.EE_FOLDER_NAME }}:${{ inputs.EE_IMAGE_TAG }}
+#      - name: Push image
+#        id: push-image
+#        working-directory: ${{ inputs.EE_FOLDER_NAME }}
+#        run: |
+#          sudo podman push \
+#          ${{ inputs.EE_FOLDER_NAME }}:${{ inputs.EE_IMAGE_TAG }}
 
 #         env:
 #           ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_TOKEN: ${{ secrets.AH_TOKEN }}
 # Above env var doesn't work yet: https://github.com/ansible/ansible-builder/issues/346
            
+      - name: Push To AAP
+        id: push-to-AAP
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          image: ${{ inputs.EE_FOLDER_NAME }}
+          tags: |
+            ${{ inputs.EE_IMAGE_TAG }}
+          registry:  hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/
+          username: ${{ secrets.HUB_USERNAME }}
+          password: ${{ secrets.HUB_PASSWORD }}
+      - name: Print image url
+        run: echo "Image pushed to ${{ steps.push-to-AAP.outputs.registry-paths }}"
 #      - name: Push To AAP
-#        id: push-to-aap
+#       id: push-to-aap
 #       uses: redhat-actions/push-to-registry@v2
 #        with:
 #          image: ${{ inputs.EE_FOLDER_NAME }}
@@ -117,26 +135,26 @@ jobs:
 #          username: ${{ secrets.HUB_USERNAME }}
 #          password: ${{ secrets.HUB_PASSWORD }} 
         
-      - name: Print summary
-        working-directory: ${{ inputs.EE_FOLDER_NAME }}
-        run: |
-          echo "## :rocket: Usage" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Image pushed to repository: [${{ steps.push-to-aap.outputs.registry-path }}](https://${{ steps.push-to-aap.outputs.registry-path }})" >> $GITHUB_STEP_SUMMARY
-          echo "> \`podman pull ${{ steps.push-to-aap.outputs.registry-path }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "> \`podman pull hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/${{ inputs.EE_FOLDER_NAME }}:${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "## :pushpin: Ansible info:" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          echo "`podman run ${{ inputs.EE_FOLDER_NAME }} ansible --version`" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          echo "## :pushpin: Installed collections:" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          echo "`podman run ${{ inputs.EE_FOLDER_NAME }} ansible-galaxy collection list`" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          echo "## :pushpin: Containerfile:" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          echo "`cat Containerfile`" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+#      - name: Print summary
+#        working-directory: ${{ inputs.EE_FOLDER_NAME }}
+#        run: |
+#          echo "## :rocket: Usage" >> $GITHUB_STEP_SUMMARY
+#          echo "" >> $GITHUB_STEP_SUMMARY
+#          echo "Image pushed to repository: [${{ steps.push-to-aap.outputs.registry-path }}](https://${{ steps.push-to-aap.outputs.registry-path }})" >> $GITHUB_STEP_SUMMARY
+#          echo "> \`podman pull ${{ steps.push-to-aap.outputs.registry-path }}\`" >> $GITHUB_STEP_SUMMARY
+#          echo "> \`podman pull hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/${{ inputs.EE_FOLDER_NAME }}:${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+#          echo "## :pushpin: Ansible info:" >> $GITHUB_STEP_SUMMARY
+#          echo "" >> $GITHUB_STEP_SUMMARY
+#          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+#          echo "`podman run ${{ inputs.EE_FOLDER_NAME }} ansible --version`" >> $GITHUB_STEP_SUMMARY
+#          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+#          echo "## :pushpin: Installed collections:" >> $GITHUB_STEP_SUMMARY
+#          echo "" >> $GITHUB_STEP_SUMMARY
+#          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+#          echo "`podman run ${{ inputs.EE_FOLDER_NAME }} ansible-galaxy collection list`" >> $GITHUB_STEP_SUMMARY
+#          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+#          echo "## :pushpin: Containerfile:" >> $GITHUB_STEP_SUMMARY
+#          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+#          echo "`cat Containerfile`" >> $GITHUB_STEP_SUMMARY
+#          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
 
