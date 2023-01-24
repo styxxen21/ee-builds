@@ -110,29 +110,31 @@ jobs:
 #          sudo /usr/local/bin/ansible-builder build \
 #          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ inputs.EE_IMAGE_TAG }}
 
-#      - name: Push image
-#        id: push-image
-#        working-directory: ${{ inputs.EE_FOLDER_NAME }}
-#        run: |
-#          sudo podman push \
-#          ${{ inputs.EE_FOLDER_NAME }}:${{ inputs.EE_IMAGE_TAG }}
+      - name: Push image
+        id: push-to-AAP
+        working-directory: ${{ inputs.EE_FOLDER_NAME }}
+        run: |
+          sudo podman push \
+          hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:20230124
+      - name: Print image url
+        run: echo "Image pushed to ${{ steps.push-to-AAP.outputs.registry-paths }}"
 
 #         env:
 #           ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_TOKEN: ${{ secrets.AH_TOKEN }}
 # Above env var doesn't work yet: https://github.com/ansible/ansible-builder/issues/346
            
-      - name: Push To AAP
-        id: push-to-AAP
-        uses: redhat-actions/push-to-registry@v2
-        with:
-          image: ${{ inputs.EE_FOLDER_NAME }}
-          tags: |
-            hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:20230124
-          registry:  hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/
-          username: ${{ secrets.HUB_USERNAME }}
-          password: ${{ secrets.HUB_PASSWORD }}
-      - name: Print image url
-        run: echo "Image pushed to ${{ steps.push-to-AAP.outputs.registry-paths }}"
+#      - name: Push To AAP
+#        id: push-to-AAP
+#        uses: redhat-actions/push-to-registry@v2
+#        with:
+#          image: ${{ inputs.EE_FOLDER_NAME }}
+#          tags: |
+#            hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:20230124
+#          registry:  hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/
+#          username: ${{ secrets.HUB_USERNAME }}
+#          password: ${{ secrets.HUB_PASSWORD }}
+#      - name: Print image url
+#        run: echo "Image pushed to ${{ steps.push-to-AAP.outputs.registry-paths }}"
 #      - name: Push To AAP
 #       id: push-to-aap
 #       uses: redhat-actions/push-to-registry@v2
