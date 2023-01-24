@@ -92,10 +92,10 @@ jobs:
         run: |
           NOW=$(date +%Y-%m-%d)
 #          echo $NOW
-      - name: Print date2
-        id: date3
-        run: |
-          echo $NOW 
+#      - name: Print date2
+#        id: date3
+#        run: |
+#          echo $NOW 
 #        echo "NOW=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
       - name: Build image
@@ -104,16 +104,16 @@ jobs:
         run: |
           sudo /usr/local/bin/ansible-builder build \
           --context=../${{ inputs.EE_FOLDER_NAME }} \
-          --tag=hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:${{ env.date }}
+          --tag=hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:${{ steps.version.outputs.builddate }}
 
       - name: Push image
         id: push-to-AAP
         working-directory: ${{ inputs.EE_FOLDER_NAME }}
         run: |
           sudo podman push \
-          hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:${{ env.date }}
+          hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:${{ steps.version.outputs.builddate }}
       - name: Print image url
-        run: echo "Image pushed to $hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:{{ inputs.EE_DATE }}"
+        run: echo "Image pushed to $hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:{{ steps.version.outputs.builddate }}"
 
 #         env:
 #           ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_TOKEN: ${{ secrets.AH_TOKEN }}
