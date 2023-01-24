@@ -86,16 +86,16 @@ jobs:
 #          AH_TOKEN: ${{ secrets.AH_TOKEN }}
 
       - name: Get current date
-        id: date
+        id: version
         run: |
           echo "builddate=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 #          echo $GITHUB_STATE \
 #          echo env.date
 
-      - name: Get current date2
-        id: date2
-        run: |
-          NOW=$(date +%Y-%m-%d)
+#      - name: Get current date2
+#        id: date2
+#        run: |
+#          NOW=$(date +%Y-%m-%d)
 #          echo $NOW
 #      - name: Print date2
 #        id: date3
@@ -109,7 +109,7 @@ jobs:
         run: |
           sudo /usr/local/bin/ansible-builder build \
           --context=../${{ inputs.EE_FOLDER_NAME }} \
-          --tag=${{ inputs.EE_REG }}:${{ output.env.builddate }}
+          --tag=${{ inputs.EE_REG }}:${{ steps.version.outputs.builddate }}
 #          --tag=hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:${{ env.builddate}}
 
       - name: Push image
