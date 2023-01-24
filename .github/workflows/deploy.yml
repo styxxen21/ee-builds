@@ -104,16 +104,16 @@ jobs:
         run: |
           sudo /usr/local/bin/ansible-builder build \
           --context=../${{ inputs.EE_FOLDER_NAME }} \
-          --tag=hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:$NOW
+          --tag=hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:${{ env.builddate}}
 
       - name: Push image
         id: push-to-AAP
         working-directory: ${{ inputs.EE_FOLDER_NAME }}
         run: |
           sudo podman push \
-          hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:$NOW
+          hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:${{ env.builddate}}
       - name: Print image url
-        run: echo "Image pushed to $hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:NOW"
+        run: echo "Image pushed to $hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:${{ env.builddate}}"
 
 #         env:
 #           ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_TOKEN: ${{ secrets.AH_TOKEN }}
