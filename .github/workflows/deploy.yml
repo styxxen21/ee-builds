@@ -21,6 +21,11 @@ on:
         description: 'this is used during the image push to AAP'
         required: false
         type: string
+      EE_DATE:
+        description: 'todays date'
+        default: '' 
+        required: true
+        type: string 
     secrets:
       HUB_PASSWORD:
         description: 'needed for registry login'
@@ -82,42 +87,19 @@ jobs:
         run: |
           sudo /usr/local/bin/ansible-builder build \
           --context=../${{ inputs.EE_FOLDER_NAME }} \
-          --tag=hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:20230124
+          --tag=hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:{{ inputs.EE_DATE }}
 
       - name: Push image
         id: push-to-AAP
         working-directory: ${{ inputs.EE_FOLDER_NAME }}
         run: |
           sudo podman push \
-          hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:20230124
+          hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:{{ inputs.EE_DATE }}
       - name: Print image url
-        run: echo "Image pushed to ${{ steps.push-to-AAP.outputs-paths }}"
+        run: echo "Image pushed to $hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:{{ inputs.EE_DATE }}"
 
 #         env:
 #           ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_TOKEN: ${{ secrets.AH_TOKEN }}
 # Above env var doesn't work yet: https://github.com/ansible/ansible-builder/issues/346
            
-      
-      - name: Print summary
-        working-directory: ${{ inputs.EE_FOLDER_NAME }}
-        run: |
-          echo "## :rocket: Usage" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Image pushed to repository: [${{ steps.push-to-aap.outputs-path }}](https://${{ steps.push-to-aap.outputs-path }})" >> $GITHUB_STEP_SUMMARY
-          echo "> \`podman pull ${{ steps.push-to-aap.outputs-path }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "> \`podman pull hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/${{ inputs.EE_FOLDER_NAME }}:${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "## :pushpin: Ansible info:" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          echo "`podman run ${{ inputs.EE_FOLDER_NAME }} ansible --version`" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          echo "## :pushpin: Installed collections:" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          echo "`podman run ${{ inputs.EE_FOLDER_NAME }} ansible-galaxy collection list`" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          echo "## :pushpin: Containerfile:" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          echo "`cat Containerfile`" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
 
