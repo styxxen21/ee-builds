@@ -83,8 +83,8 @@ jobs:
       - name: Get current date
         id: date
         run: |
-          "{date}={$(date +'%Y-%m-%d')}" >> $GITHUB_STATE
-          echo $GITHUB_STATE \
+          echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_STATE
+#          echo $GITHUB_STATE \
           echo env.date
 
       - name: Get current date2
