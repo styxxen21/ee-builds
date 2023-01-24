@@ -26,6 +26,11 @@ on:
  #       default: '' 
  #       required: true
  #       type: string 
+      EE_REG:
+        description: 'registry url'
+        default: '' 
+        required: true
+        type: string 
     secrets:
       HUB_PASSWORD:
         description: 'needed for registry login'
@@ -104,7 +109,8 @@ jobs:
         run: |
           sudo /usr/local/bin/ansible-builder build \
           --context=../${{ inputs.EE_FOLDER_NAME }} \
-          --tag=hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:${{ env.builddate}}
+          --tag=${{ inputs.EE_REG }}:${{ env.builddate}}
+#          --tag=hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:${{ env.builddate}}
 
       - name: Push image
         id: push-to-AAP
