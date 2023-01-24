@@ -109,7 +109,7 @@ jobs:
         run: |
           sudo /usr/local/bin/ansible-builder build \
           --context=../${{ inputs.EE_FOLDER_NAME }} \
-          --tag=${{ inputs.EE_REG }}:${{ env.builddate}}
+          --tag=${{ inputs.EE_REG }}:${{ output.env.builddate }}
 #          --tag=hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:${{ env.builddate}}
 
       - name: Push image
