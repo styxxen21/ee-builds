@@ -79,13 +79,22 @@ jobs:
 #        run: |
 #          sudo -i
           
+#      - name: Build image
+#        id: build-image
+#        working-directory: ${{ inputs.EE_FOLDER_NAME }}
+#        run: |
+#          sudo /usr/local/bin/ansible-builder build \
+#          --context=../${{ inputs.EE_FOLDER_NAME }} \
+#          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ inputs.EE_IMAGE_TAG }}
+
       - name: Build image
         id: build-image
         working-directory: ${{ inputs.EE_FOLDER_NAME }}
         run: |
           sudo /usr/local/bin/ansible-builder build \
           --context=../${{ inputs.EE_FOLDER_NAME }} \
-          --tag=${{ inputs.EE_FOLDER_NAME }}:${{ inputs.EE_IMAGE_TAG }}
+          --tag=hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:20230124
+
 #      - name: Build image
 #        id: build-image
 #        working-directory: ${{ inputs.EE_FOLDER_NAME }}
@@ -118,7 +127,7 @@ jobs:
         with:
           image: ${{ inputs.EE_FOLDER_NAME }}
           tags: |
-            ${{ inputs.EE_IMAGE_TAG }}
+            hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:20230124
           registry:  hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/
           username: ${{ secrets.HUB_USERNAME }}
           password: ${{ secrets.HUB_PASSWORD }}
