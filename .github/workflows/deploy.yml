@@ -80,10 +80,12 @@ jobs:
 #        env:
 #          AH_TOKEN: ${{ secrets.AH_TOKEN }}
 
-      - name: Get current dat
+      - name: Get current date
         id: date
         run: |
           echo "{date}={$(date +'%Y-%m-%d')}" >> $GITHUB_STATE
+          echo $GITHUB_STATE
+          echo env.date
 #        echo "NOW=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
       - name: Build image
