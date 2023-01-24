@@ -83,16 +83,19 @@ jobs:
       - name: Get current date
         id: date
         run: |
-          echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_STATE
+          echo "builddate=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 #          echo $GITHUB_STATE \
-          echo env.date
+#          echo env.date
 
       - name: Get current date2
         id: date2
         run: |
           NOW=$(date +%Y-%m-%d)
-          echo $NOW
-
+#          echo $NOW
+      - name: Print date2
+        id: date3
+        run: |
+          echo $NOW 
 #        echo "NOW=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
       - name: Build image
