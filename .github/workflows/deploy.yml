@@ -89,19 +89,6 @@ jobs:
         id: version
         run: |
           echo "builddate=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
-#          echo $GITHUB_STATE \
-#          echo env.date
-
-#      - name: Get current date2
-#        id: date2
-#        run: |
-#          NOW=$(date +%Y-%m-%d)
-#          echo $NOW
-#      - name: Print date2
-#        id: date3
-#        run: |
-#          echo $NOW 
-#        echo "NOW=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
       - name: Build image
         id: build-image
@@ -117,9 +104,9 @@ jobs:
         working-directory: ${{ inputs.EE_FOLDER_NAME }}
         run: |
           sudo podman push \
-          hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:${{ env.builddate}}
+          ${{ inputs.EE_REG }}:${{ steps.version.outputs.builddate }}
       - name: Print image url
-        run: echo "Image pushed to $hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:${{ env.builddate}}"
+        run: echo "Image pushed to ${{ inputs.EE_REG }}:${{ steps.version.outputs.builddate }}"
 
 #         env:
 #           ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_TOKEN: ${{ secrets.AH_TOKEN }}

@@ -25,7 +25,6 @@ jobs:
       EE_FOLDER_NAME: 'vcc_ee'
       EE_IMAGE_TAG: 'latest'
       EE_REG: 'hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee'
-#      EE_DATE: '20230124'
 #      AAP_USER: 'cr-ansiblehub-ee'
     secrets:
       HUB_USERNAME: ${{ secrets.HUB_USERNAME }}
