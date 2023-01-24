@@ -24,7 +24,7 @@ jobs:
     with:
       EE_FOLDER_NAME: 'vcc_ee'
       EE_IMAGE_TAG: 'latest'
-      EE_DATE: 'date +"%Y-%m-%d"'
+#      EE_DATE: 'date +"%Y-%m-%d"'
 #      EE_DATE: '20230124'
 #      AAP_USER: 'cr-ansiblehub-ee'
     secrets:

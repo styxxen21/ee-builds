@@ -21,11 +21,11 @@ on:
         description: 'this is used during the image push to AAP'
         required: false
         type: string
-      EE_DATE:
-        description: 'todays date'
-        default: '' 
-        required: true
-        type: string 
+ #     EE_DATE:
+ #       description: 'todays date'
+ #       default: '' 
+ #       required: true
+ #       type: string 
     secrets:
       HUB_PASSWORD:
         description: 'needed for registry login'
@@ -80,6 +80,11 @@ jobs:
 #        env:
 #          AH_TOKEN: ${{ secrets.AH_TOKEN }}
 
+      - name: Get current dat
+        id: date
+        run: |
+          echo "{date}={$(date +'%Y-%m-%d')}" >> $GITHUB_STATE
+#        echo "NOW=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
       - name: Build image
         id: build-image
@@ -87,14 +92,14 @@ jobs:
         run: |
           sudo /usr/local/bin/ansible-builder build \
           --context=../${{ inputs.EE_FOLDER_NAME }} \
-          --tag=hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:${{ inputs.EE_DATE }}
+          --tag=hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:${{ env.date }}
 
       - name: Push image
         id: push-to-AAP
         working-directory: ${{ inputs.EE_FOLDER_NAME }}
         run: |
           sudo podman push \
-          hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:${{ inputs.EE_DATE }}
+          hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:${{ env.date }}
       - name: Print image url
         run: echo "Image pushed to $hub.aapbmylc6irzyfx6.ansiblecloud.redhat.com/vcc_ee:{{ inputs.EE_DATE }}"
 
