@@ -29,7 +29,7 @@ on:
       EE_REG:
         description: 'registry url'
         default: '' 
-        required: true
+        required: false
         type: string 
     secrets:
       HUB_PASSWORD:
