@@ -6,3 +6,4 @@ collections:
   - ansible.utils
   - ansible.posix
   - azure.azcollection
+  - awx.awx
